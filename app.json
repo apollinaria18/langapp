@@ -4,7 +4,11 @@
     "slug": "langapp",
     "name": "LangApp",
     "scheme": "langapp",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,7 +24,7 @@
       "bundleIdentifier": "com.yourcompany.langapp"
     },
     "android": {
-      "package": "com.yourcompany.langapp",
+      "package": "host.exp.exponent",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -31,12 +35,19 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-asset"
     ],
     "extra": {
       "eas": {
         "projectId": "edf06476-43bb-4ca4-b75b-cd0268f14ea8"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/edf06476-43bb-4ca4-b75b-cd0268f14ea8"
     }
   }
 }

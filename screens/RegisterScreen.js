@@ -1,45 +1,57 @@
 // screens/RegisterScreen.js
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { TextInput, Button } from "react-native-paper";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../firebase/firebase"; // важно добавить db в firebase.js
 
 export default function RegisterScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleRegister = async () => {
-    setError('');
+    setError("");
 
-    if (!email.includes('@')) {
-      setError('Please enter a valid email address.');
+    // Проверка email
+    if (!email.includes("@")) {
+      setError("Please enter a valid email address.");
       return;
     }
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.');
+    // Проверка пароля
+    if (password.length < 8 || password.length > 20) {
+      setError("Password must be between 8 and 20 characters.");
       return;
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // сохраняем данные профиля в Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        username: email.split("@")[0], // по умолчанию логин = часть почты
+        createdAt: serverTimestamp(),
+      });
+
       alert("Registration successful!");
-      navigation.navigate('Login');
+      navigation.navigate("Login");
     } catch (e) {
-      if (e.code === 'auth/email-already-in-use') {
-        setError('Email is already in use.');
+      if (e.code === "auth/email-already-in-use") {
+        setError("Email is already in use.");
       } else {
-        setError('Registration failed. Please try again.');
+        setError("Registration failed. Please try again.");
       }
     }
   };
 
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/logo.png')} style={styles.logo} />
+      <Image source={require("../assets/logo.png")} style={styles.logo} />
       <Text style={styles.title}>Register</Text>
 
       <TextInput
@@ -59,7 +71,7 @@ export default function RegisterScreen({ navigation }) {
         mode="outlined"
         right={
           <TextInput.Icon
-            icon={showPassword ? 'eye-off' : 'eye'}
+            icon={showPassword ? "eye-off" : "eye"}
             onPress={() => setShowPassword(!showPassword)}
           />
         }
@@ -71,7 +83,7 @@ export default function RegisterScreen({ navigation }) {
         Register
       </Button>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <Text style={styles.link}>Already have an account? Log In</Text>
       </TouchableOpacity>
     </View>
@@ -79,11 +91,39 @@ export default function RegisterScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 30, justifyContent: 'center' },
-  input: { marginBottom: 15 },
-  button: { marginTop: 10, backgroundColor: '#6C63FF' },
-  link: { textAlign: 'center', marginTop: 15, color: '#6C63FF' },
-  title: { fontSize: 24, textAlign: 'center', marginBottom: 20, fontWeight: 'bold' },
-  logo: { width: 100, height: 100, alignSelf: 'center', marginBottom: 20 },
-  error: { color: 'red', textAlign: 'center', marginBottom: 10 },
+  container: { 
+    flex: 1, 
+    padding: 30, 
+    justifyContent: "center",
+   },
+  input: { 
+    marginBottom: 15,
+   },
+  button: { 
+    marginTop: 10, 
+    backgroundColor: "#6C63FF",
+   },
+  link: { 
+    textAlign: "center", 
+    marginTop: 15, 
+    color: "#6C63FF",
+   },
+  title: { 
+    fontSize: 24, 
+    textAlign: "center", 
+    marginBottom: 20, 
+    fontWeight: "bold",
+    color: '#5750cfff',
+   },
+  logo: { 
+    width: 150, 
+    height: 150, 
+    alignSelf: "center", 
+    marginBottom: 20,
+   },
+  error: { 
+    color: "red", 
+    textAlign: "center", 
+    marginBottom: 10,
+   },
 });
