@@ -1,0 +1,17 @@
+.content-form {
+  max-width: 600px;
+}
+
+.content-form input,
+.content-form textarea,
+.content-form select {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.content-form button {
+  margin-top: 16px;
+}
