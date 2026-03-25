@@ -1,22 +1,38 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/firebase';
 import {
   LayoutGrid,
   Users,
   Folder,
   MessageSquare,
   Menu,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 import '../styles/global.css';
-import { Languages } from "lucide-react";
-
 
 export default function Sidebar() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [user] = useAuthState(auth);
+  const [loading, setLoading] = useState(false);
 
   const isActive = path => location.pathname === path;
+
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      await signOut(auth);
+      // После выхода будет автоматический редирект из App.jsx
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -26,6 +42,14 @@ export default function Sidebar() {
           <Menu size={26} />
         </button>
         <span className="mobile-logo">LangApp</span>
+        <button 
+          onClick={handleLogout} 
+          className="mobile-logout"
+          disabled={loading}
+        >
+          <LogOut size={18} />
+          <span>{loading ? '...' : 'Exit'}</span>
+        </button>
       </header>
 
       {/* Overlay */}
@@ -33,7 +57,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside className={`sidebar ${open ? 'open' : ''}`}>
-       <div className="sidebar-logo">
+        <div className="sidebar-logo">
           <div className="logo-badge">
             <span className="logo-initials">LA</span>
           </div>
@@ -47,6 +71,7 @@ export default function Sidebar() {
             <X size={22} />
           </button>
         </div>
+
         <nav className="sidebar-nav">
           <Link to="/" className={isActive('/') ? 'active' : ''} onClick={() => setOpen(false)}>
             <LayoutGrid size={20} />
@@ -68,6 +93,29 @@ export default function Sidebar() {
             <span>Feedback</span>
           </Link>
         </nav>
+
+        {/* User Info and Logout */}
+        <div className="sidebar-footer">
+          {user && (
+            <div className="user-info">
+              <div className="user-email">
+                {user.email}
+              </div>
+              <div className="user-role">
+                Administrator
+              </div>
+            </div>
+          )}
+          
+          <button 
+            onClick={handleLogout} 
+            className="logout-sidebar-btn"
+            disabled={loading}
+          >
+            <LogOut size={20} />
+            <span>{loading ? 'Logging out...' : 'Log out'}</span>
+          </button>
+        </div>
       </aside>
     </>
   );

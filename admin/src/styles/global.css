@@ -206,3 +206,130 @@ html, body {
     display: none;
   }
 }
+
+/* ====== LOGOUT BUTTON IN SIDEBAR ====== */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.logout-sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #040e69;
+  background: rgba(148, 226, 236, 0.05);
+  border: 1px solid rgba(3, 48, 170, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.logout-sidebar-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.logout-sidebar-btn:hover:not(:disabled) {
+  background: rgba(138, 208, 248, 0.12);
+  border-color: #051970;
+  transform: translateX(4px);
+}
+
+.logout-sidebar-btn:active:not(:disabled) {
+  transform: translateX(2px);
+}
+
+.logout-sidebar-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ====== LOGOUT BUTTON IN MOBILE HEADER ====== */
+.mobile-logout {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  color: #0b2370;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-logout svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mobile-logout:hover:not(:disabled) {
+  background: rgba(138, 208, 248, 0.12);
+  border-color: #0a3c88;
+}
+
+.mobile-logout:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ====== ADJUST SIDEBAR LAYOUT FOR FLEX COLUMN ====== */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ====== USER INFO IN SIDEBAR ====== */
+.user-info {
+  margin-top: 24px;
+  padding: 16px 12px;
+  background: rgba(14, 165, 233, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(14, 165, 233, 0.1);
+}
+
+.user-email {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0ea5e9;
+  word-break: break-all;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.user-role {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #5b6c80;
+  text-align: center;
+}
+
+/* ====== RESPONSIVE ADJUSTMENTS ====== */
+@media (max-width: 768px) {
+  .sidebar-footer {
+    padding: 20px 16px;
+  }
+  
+  .logout-sidebar-btn {
+    padding: 14px 16px;
+    font-size: 15px;
+    justify-content: center;
+  }
+  
+  .user-info {
+    margin-top: 20px;
+    padding: 12px;
+  }
+}
